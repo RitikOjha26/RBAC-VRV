@@ -33,9 +33,10 @@ const AddRole: React.FC<AddRoleProps> = ({ onClose }) => {
     e.preventDefault();
 
     try {
+      const cumulativeFeature = [roleFeature, userPageFeature];
       setFeatures([roleFeature, userPageFeature]);
-      
-      const newRole = { roleId, roleName, features };
+      console.log(features);
+      const newRole = { roleId, roleName, features: cumulativeFeature };
       console.log("This is the new Rolee" ,roleFeature);
       const addedUser = await addRole(newRole);
       console.log(addedUser)
