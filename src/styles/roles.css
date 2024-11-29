@@ -1,0 +1,30 @@
+.roles-page{
+    display: flex;
+}
+
+.roles-container{
+    width: 100%;
+}
+
+.add-user h2{
+    visibility: hidden;
+}
+
+
+
+
+@media screen and (min-width:600px) {
+    
+}
+@media screen and (min-width:1024px) {
+    .roles-container{
+        display: flex;
+        flex-direction: column;
+        
+        margin: 0px 10px;
+    }
+
+    .add-user h2{
+        visibility: visible;
+    }
+}

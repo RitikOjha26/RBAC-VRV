@@ -1,0 +1,35 @@
+.update_user-form{
+    
+    position:fixed;
+    top: 5%;
+    border-radius: 25px;
+    z-index: 2000;
+}
+.form-heading{
+    text-align: center;
+}
+.radio-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 15px;
+    
+}
+
+.form-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-bottom: 20px;
+}
+
+@media screen and (min-width:600px) {
+    .update_user-form{
+        left: 18%;
+    }
+}
+@media screen and (min-width:1024px) {
+    .update_user-form{
+        left: 25%;
+    }
+}

@@ -1,0 +1,36 @@
+.user-form{
+   
+    padding: 10px;
+    
+    position:fixed;
+    top: 0%;
+    
+    border-radius: 25px;
+    z-index: 2000;
+}
+.form-heading{
+    text-align: center;
+}
+.radio-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 15px;
+    
+}
+
+.form-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+@media screen and (min-width:600px) {
+    .user-form{
+        left: 18%;
+    }
+}
+@media screen and (min-width:1024px) {
+    .user-form{
+        left: 25%;
+    }
+}

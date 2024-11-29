@@ -1,0 +1,31 @@
+.role-form{
+    position:fixed;
+    top: 10%;
+    border-radius: 25px;
+    z-index: 2000;
+}
+.form-heading{
+    text-align: center;
+}
+.radio-button{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.form-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media screen and (min-width:600px) {
+    .role-form{
+        left: 12%;
+    }
+}
+@media screen and (min-width:1024px) {
+    .role-form{
+        left: 25%;
+    }
+}
