@@ -175,6 +175,71 @@ const rolesData = {
 ```
 
 ---
+---
+
+## Setup Instructions
+
+Follow these steps to set up the project on your local system:
+
+### Prerequisites
+
+Make sure you have the following installed on your system:
+
+1. **Node.js**: [Download and Install Node.js](https://nodejs.org/)
+2. **Git**: [Download and Install Git](https://git-scm.com/)
+3. **Code Editor**: [VS Code](https://code.visualstudio.com/) is recommended.
+
+---
+
+### 1. Clone the Repository
+
+Use the following command to clone the repository:
+
+```bash
+git clone https://github.com/RitikOjha26/RBAC-VRV.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd RBAC-VRV
+```
+
+---
+
+### 2. Install Dependencies
+
+Run the following command to install all required dependencies:
+
+```bash
+npm install
+```
+
+---
+
+### 3. Start the Development Server
+
+To start the development server, run:
+
+```bash
+npm run dev
+```
+
+The app will be accessible at `http://localhost:5173/`.
+
+---
+
+
+## Scripts
+
+Here are some useful npm scripts:
+
+- **Start Development Server**: `npm run dev`
+- **Build Production Files**: `npm run build`
+- **Lint Code**: `npm run lint`
+
+
+---
 
 ## Login Credentials
 
