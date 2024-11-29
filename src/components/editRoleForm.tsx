@@ -1,97 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Stack, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
 import { useRole } from '../context/rolescontext';
-import { updateRole, getRolesById  } from '../api/roles';
+import { updateRole, getRolesById } from '../api/roles';
 import '../styles/editRoleForm.css';
 
 interface EditUserProps {
-    value: string;
-    onClose: () => void;
+  value: string;
+  onClose: () => void;
 }
 
 interface Feature {
-    featureName: string;
-    access: "WRITE" | "READ" | "NO_ACCESS";
+  featureName: string;
+  access: "WRITE" | "READ" | "NO_ACCESS";
 }
 
-interface Role {
-    roleId: string;
-    roleName: string;
-    features: Feature[];
-}
+
 
 
 const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
 
-    const { fetchRolesList } = useRole();
-    const [roleId, setRoleId] = useState<string>('');
-    const [roleName, setRoleName] = useState<string>('');
-    const [features, setFeatures] = useState<Feature[]>([])
-    const [roleFeature, setRoleFeature] = useState<Feature>({
-        featureName: "Roles Page",
-        access: "NO_ACCESS",
-    });
-    const [userPageFeature, setUserPageFeature] = useState<Feature>({
-        featureName: "User Management",
-        access: "NO_ACCESS",
-    });
-
-    const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userData = await getRolesById(value);
-
-                setRoleId(userData.roleId);
-                setRoleName(userData.roleName);
-                setFeatures(userData.features);
-                setRoleFeature(features[0]);
-                setUserPageFeature(features[1]);
+  const { fetchRolesList } = useRole();
+  const [roleId, setRoleId] = useState<string>('');
+  const [roleName, setRoleName] = useState<string>('');
+  const [features, setFeatures] = useState<Feature[]>([])
+  const [roleFeature, setRoleFeature] = useState<Feature>({
+    featureName: "Roles Page",
+    access: "NO_ACCESS",
+  });
+  const [userPageFeature, setUserPageFeature] = useState<Feature>({
+    featureName: "User Management",
+    access: "NO_ACCESS",
+  });
 
 
-            } catch (err) {
-                setError('Failed to fetch user data');
-            }
-        };
 
-        fetchUserData();
-    }, [value ]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await getRolesById(value);
 
-    console.log("This is role Feature",roleFeature);
-    // Handle form submission
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        setFeatures([roleFeature , userPageFeature]);
-        const updatedUser = { roleId, roleName , features };
-        
-        try {
-            await updateRole(updatedUser);  
-            await fetchRolesList();
-            onClose()
-            setSuccessMessage('User updated successfully');
-        } catch (err) {
-            setError('Failed to update user');
+        if (userData) {
+          setRoleId(userData.roleId);
+          setRoleName(userData.roleName);
+          setFeatures(userData.features);
+          setRoleFeature(userData.features?.[0] || roleFeature);
+          setUserPageFeature(userData.features?.[1] || userPageFeature);
         }
+      } catch (err) {
+        console.log('Failed to fetch user data', err);
+      }
     };
 
+    fetchUserData();
+  }, [value]);
 
-    return (
-        <div className="role-editform">
+  console.log("This is role Feature", roleFeature);
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const cumulativeFeature = [roleFeature, userPageFeature];
+    console.log("This is combined ",cumulativeFeature);
+
+    setFeatures(cumulativeFeature);
+    console.log(features);
+    const updatedUser = { roleId, roleName, features: cumulativeFeature };
+
+    try {
+      await updateRole(updatedUser);
+      await fetchRolesList();
+      onClose();
+
+    } catch (err) {
+      console.log('Failed to update user', err);
+    }
+  };
+
+
+  return (
+    <div className="role-editform">
       <React.Fragment>
-        
+
         <Box
           sx={{
             backdropFilter: 'blur(10px)',
             background: 'rgba(255, 255, 255, 0.2)',
             borderRadius: '8px',
             border: '1px solid rgba(255, 255, 255, 0.3)',
-            padding: '2rem',
+            padding: '0.5rem',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            maxWidth:"500px",
             gap: 2,
           }}
         >
@@ -132,7 +132,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
               />
             </Stack>
 
-            <FormControl component="fieldset" sx={{ mb: 4 }} className="radio-button">
+            <FormControl component="fieldset" sx={{ mb: 4, ml: 2 }} className="radio-button">
               <FormLabel component="legend" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
                 Roles Page
               </FormLabel>
@@ -140,12 +140,12 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
               <RadioGroup
                 row
                 value={roleFeature.access}
-                onChange={(e) =>
-                  setRoleFeature({
-                    featureName: "Roles Page",
+                onChange={(e) => {
+                  setRoleFeature((prev) => ({
+                    ...prev,
                     access: e.target.value as "WRITE" | "READ" | "NO_ACCESS",
-                  })
-                }
+                  }));
+                }}
               >
                 <FormControlLabel
                   value="WRITE"
@@ -190,7 +190,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
             </FormControl>
 
 
-            <FormControl component="fieldset" sx={{ mb: 4 }} className="radio-button">
+            <FormControl component="fieldset" sx={{ mb: 4, ml: 2 }} className="radio-button">
               <FormLabel component="legend" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
                 User Management Page
               </FormLabel>
@@ -198,18 +198,15 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
               <RadioGroup
                 row
                 value={userPageFeature.access}
-                onChange={(e) =>{
-                  
-                  setUserPageFeature({
-                    
-                    featureName: "User Management",
+                onChange={(e) => {
+                  setUserPageFeature((prev) => ({
+                    ...prev,
                     access: e.target.value as "WRITE" | "READ" | "NO_ACCESS",
-                  });
-                  console.log(e.target.value);}
-                }
+                  }));
+                }}
               >
                 <FormControlLabel
-                  value= {"WRITE"}
+                  value={"WRITE"}
                   control={<Radio />}
                   label="Write"
                   sx={{
@@ -222,7 +219,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
                   }}
                 />
                 <FormControlLabel
-                value={"READ"}
+                  value={"READ"}
                   control={<Radio />}
                   label="Read"
                   sx={{
@@ -235,7 +232,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
                   }}
                 />
                 <FormControlLabel
-                value={"NO_ACCESS"}
+                  value={"NO_ACCESS"}
                   control={<Radio />}
                   label="No Access"
                   sx={{
@@ -259,7 +256,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
                 marginBottom: 2,
                 merginRight: 1,
               }}
-              >Add Role</Button>
+              >Edit Role</Button>
               <Button variant="outlined" sx={{
                 color: 'red',
                 borderColor: 'red',
@@ -273,7 +270,7 @@ const EditRoleForm: React.FC<EditUserProps> = ({ value, onClose }) => {
         </Box>
       </React.Fragment>
     </div>
-    )
+  )
 }
 
 export default EditRoleForm

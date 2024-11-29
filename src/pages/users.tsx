@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,11 +8,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { FaSlidersH } from "react-icons/fa";
 import { FaAddressBook } from "react-icons/fa6";
-import { FaEdit , FaSignOutAlt } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useAuth } from '../context/authContext';
 import { useRole } from '../context/rolescontext';
-import { getAllUsers, deleteUser } from '../api/users';
+import { deleteUser } from '../api/users';
 import SIDENAV from '../components/sideNav'
 import USERFORM from '../components/addUserForm';
 import EDITFORM from '../components/editUserForm';
@@ -30,11 +29,11 @@ interface User {
 }
 
 const Users = () => {
-  const navigate = useNavigate();
+  
   const { user, userList, fetchUserList } = useAuth();
   const { role } = useRole();
   const [currentUserId, setCurrentUserId] = useState<string>("");
-  const [writeAccess, setWriteAccess] = useState<boolean | null>(null);
+  const [writeAccess, setWriteAccess] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showUserForm, setShowUserForm] = useState(false);
@@ -47,7 +46,7 @@ const Users = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      // Ensure the user and role data are available
+     
       if (!role) {
         setError("Role information not available.");
         return;
@@ -160,7 +159,7 @@ const Users = () => {
         <div className="heading">
           <h2>User Management</h2>
 
-          <button className="add-user" onClick={handleAddUserClick} ><FaAddressBook size="2em" /></button>
+          {writeAccess &&<button className="add-user" onClick={handleAddUserClick} ><FaAddressBook size="2em" style={{ marginRight: "5px" }} />{window.innerWidth <= 768 ?<h3>Add User</h3> : ""}</button>}
         </div>
 
         {showUserForm && (
@@ -240,7 +239,7 @@ const Users = () => {
                     textAlign: "center",
                   }}
                 >Active</TableCell>
-                {writeAccess !== null ? <TableCell className="tableCell"
+                {writeAccess !== false ? <TableCell className="tableCell"
                   sx={{
                     padding: "10px",
                     color: "white",
@@ -248,7 +247,7 @@ const Users = () => {
                     textAlign: "center",
                   }}
                 >Edit</TableCell> : ''}
-                {writeAccess !== null ? <TableCell className="tableCell"
+                {writeAccess !== false ? <TableCell className="tableCell"
                   sx={{
                     padding: "10px",
                     color: "white",

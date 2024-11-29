@@ -3,7 +3,7 @@ import '../styles/profile.css';
 
 interface Props {
     name : string ;
-    id:string ;
+    id: string ;
     email:string;
     roleName:string;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,9 +11,8 @@ import { FaEdit } from "react-icons/fa";
 import { FaSlidersH } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useRole } from '../context/rolescontext'
-import { getAllUsers } from '../api/users'
 import { useAuth } from '../context/authContext'
-import { getAllRoles , deleteRole } from '../api/roles';
+import { deleteRole } from '../api/roles';
 import SIDENAV from '../components/sideNav'
 import ADDROLEFORM from '../components/addRoleForm';
 import EditRoleForm from '../components/editRoleForm';
@@ -36,18 +35,18 @@ const Roles = () => {
   const { role, rolesList, fetchRolesList } = useRole();
   const [selectedRoleId , setSelectedRoleId] = useState<string>("");
   const [currentRoleId , setCurrentRoleId] = useState<string>("");
-  const [writeAccess, setWriteAccess] = useState<boolean | null>(null);
+  const [writeAccess, setWriteAccess] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
   const [showAddRoleForm, setShowAddRoleForm] = useState<boolean>(false);
-  const [showEditRoleForm, setEditRoleForm] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showEditRoleForm, setShowEditRoleForm] = useState<boolean>(false);
+  
   const [isMobileNavVisible, setMobileNavVisisble] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRoles = async () => {
       if (!user || !role) {
-        setError("Role information not available.");
-        return;
+        throw new Error("User Data Not Fetched")
+        
       }
 
       if(role) {
@@ -76,7 +75,7 @@ const Roles = () => {
       }
       catch (error) {
         console.log("Error Featching Data", error);
-        setError("Failed to Fetch Users")
+       
       }
 
     }
@@ -87,11 +86,12 @@ const Roles = () => {
 
   const handleCloseRoleForm = () => {
     setShowAddRoleForm(false);
+    setShowEditRoleForm(false);
   }
 
   const handleUserRoleEdit = (Id: string ) => {
     setSelectedRoleId(Id)
-    setEditRoleForm(true);
+    setShowEditRoleForm(true);
 
   }
 
@@ -107,6 +107,8 @@ const Roles = () => {
     setMobileNavVisisble(!isMobileNavVisible);
 }
 
+console.log(showEditRoleForm);
+
   return (
     <div className='roles-page'>
       <Particles/>
@@ -117,7 +119,7 @@ const Roles = () => {
       <div className="heading">
       
         <h2>Roles Manangement</h2>
-        <button className='add-user' onClick={handleAddRoleClick} ><MdAddModerator size="2em" style={{ marginRight: "5px" }}  /> {window.innerWidth <= 768 ?<h3>Add User</h3> : ""}</button>
+        {writeAccess && <button className='add-user' onClick={handleAddRoleClick} ><MdAddModerator size="2em" style={{ marginRight: "5px" }}  /> {window.innerWidth <= 768 ?<h3>Add Roles</h3> : ""}</button>}
       </div>
 
       {showAddRoleForm && (
@@ -190,7 +192,7 @@ const Roles = () => {
                   textAlign: "center",
                 }}
               >User Management</TableCell>
-              {writeAccess !== null ? <TableCell className="tableCell"
+              {writeAccess !== false ? <TableCell className="tableCell"
                 sx={{
                   padding: "10px",
                   color: "white",
@@ -198,7 +200,7 @@ const Roles = () => {
                   textAlign: "center",
                 }}
               >Edit</TableCell> : ''}
-              {writeAccess !== null ? <TableCell className="tableCell"
+              {writeAccess !== false ? <TableCell className="tableCell"
                 sx={{
                   padding: "10px",
                   color: "white",

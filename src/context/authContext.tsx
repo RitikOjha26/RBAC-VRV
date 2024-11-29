@@ -2,21 +2,20 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { LoginAPI , getAllUsers } from '../api/users';
 
 interface User {
-  roleId: User | null;
-  userID: string,
-  userName:string,
-  email:string,
-  roleID:string,
-  active: boolean,
-  token:string,
+  userId: string;
+  userName: string;
+  email: string;
+  roleId: string;
+  active: boolean;
+  
 }
 
 
 
 
 interface AuthContextType {
-  user: User | null; 
-  userList: User[] | null;
+  user: User | null ; 
+  userList: User[];
   login: (email: string, password: string) => Promise<User>;
   logout: () => void;
   fetchUserList: () => Promise<void>;
@@ -40,8 +39,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null); 
-  const [userList, setUserList] = useState<User[] | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [userList, setUserList] = useState<User[]>([]);
 
   const login = async (email: string, password: string) => {
     try {

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { useRole } from '../context/rolescontext';
 import { getUserCount } from '../api/users';
 import { getRolesCount } from '../api/roles';
 import { FaSlidersH } from "react-icons/fa";
-import { FaSignOutAlt } from "react-icons/fa";
 import SIDENAV from '../components/sideNav';
 import Profile from '../components/profile';
 import Charts from '../components/charts';
@@ -13,10 +11,9 @@ import Particles from '../components/particles'
 import '../styles/dashboard.css'
 
 const Dashboard = () => {
-    const navigate = useNavigate(); 
-    const { user , logout} = useAuth();
+    
+    const { user} = useAuth();
     const { role, getPermission } = useRole();
-    const [active, setActive] = useState<boolean>(false);
     const [roleCount, setRoleCount] = useState<number | null>(null);
     const [userCount, setUserCount] = useState<number | null>(null);
     const [isMobileNavVisible, setMobileNavVisisble] = useState<boolean>(false);
@@ -24,7 +21,7 @@ const Dashboard = () => {
     useEffect(() => {
         if (user && user.roleId && !role) {
             getPermission(user.roleId);
-            setActive(user?.active);
+            
         }
 
         if (role) {
@@ -76,13 +73,7 @@ const Dashboard = () => {
     const handleNavtoggle = () => {
         setMobileNavVisisble(!isMobileNavVisible);
     }
-    const handleLogOut = () =>{
-        logout();
-        navigate('/login'); 
-   }
 
-
-    
     if (!user) {
         return <div>Loading user information...</div>;
     }
@@ -113,7 +104,7 @@ const Dashboard = () => {
                             <h2>Total Roles</h2>
                             <p>{roleCount !== null ? roleCount : "N/A"}</p>
                         </div>
-                        <Charts className="chart" />
+                        <Charts />
                     </div>
 
                 </div>

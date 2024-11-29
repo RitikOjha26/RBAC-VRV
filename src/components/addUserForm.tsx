@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Stack, FormControl, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
-import { addUser, getAllUsers } from '../api/users';
+import { addUser} from '../api/users';
 import { useAuth } from '../context/authContext';
-import { Link } from "react-router-dom";
 import '../styles/addUserForm.css'
 
 interface AddUserProps {
@@ -18,8 +17,8 @@ const AddUser: React.FC<AddUserProps> = ({ onClose, onUserDataUpdated }) => {
     const [password, setPassword] = useState<string>('');
     const [roleId, setRoleId] = useState<string>('');
     const [active, setActive] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    
+    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,7 +26,7 @@ const AddUser: React.FC<AddUserProps> = ({ onClose, onUserDataUpdated }) => {
         try {
             const newUser = { userId, userName, email, password, roleId, active };
             const addedUser = await addUser(newUser);
-            setSuccessMessage(`User ${addedUser.userName} added successfully!`);
+            console.log(addedUser);
 
             // Clear the form
             // setUserId("");
@@ -37,12 +36,11 @@ const AddUser: React.FC<AddUserProps> = ({ onClose, onUserDataUpdated }) => {
             // setRoleId("");
             // setActive(true);
 
-            // Optionally fetch all users to display updated data
             await fetchUserList();
             onClose();
-            console.log("Updated Users List:", allUsers);
+            
         } catch (err: any) {
-            setError(err.message);
+            console.log("Error " , err);
         }
     };
 

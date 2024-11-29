@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { userPermissionsAPI , getAllRoles , getRolesById } from '../api/roles';
+import { userPermissionsAPI , getAllRoles } from '../api/roles';
 import { useAuth } from '../context/authContext'; 
 
 interface Feature {
@@ -66,8 +66,8 @@ export const RoleProvider: React.FC<RoleProviderProps> = ({ children }) => {
   
   
   useEffect(() => {
-    if (user && user.roleID) {
-        getPermission(user.roleID);
+    if (user && user.roleId) {
+        getPermission(user.roleId);
     }
   }, [user]); 
 

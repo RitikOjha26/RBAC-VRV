@@ -54,7 +54,7 @@ export const LoginAPI = async (email: string, password: string) => {
 
     const { password, ...userData } = user;
     return {
-      token: `mockToken-${user.userId}-${Date.now()}`,
+
       ...userData,
     };
   }

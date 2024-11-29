@@ -17,7 +17,7 @@ const AddRole: React.FC<AddRoleProps> = ({ onClose }) => {
   const { fetchRolesList } = useRole();
   const [roleId, setRoleId] = useState<string>('');
   const [roleName, setRoleName] = useState<string>('');
-  const [features, setFeatures] = useState<Feature[]>([])
+  const [features, setFeatures] = useState<Feature[]>()
   const [roleFeature, setRoleFeature] = useState<Feature>({
     featureName: "Roles Page",
     access: "NO_ACCESS",
@@ -26,24 +26,25 @@ const AddRole: React.FC<AddRoleProps> = ({ onClose }) => {
     featureName: "User Management",
     access: "NO_ACCESS",
   });
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       setFeatures([roleFeature, userPageFeature]);
-
+      
       const newRole = { roleId, roleName, features };
+      console.log("This is the new Rolee" ,roleFeature);
       const addedUser = await addRole(newRole);
-      setSuccessMessage(`User ${addedUser} added successfully!`);
+      console.log(addedUser)
 
       await fetchRolesList();
       onClose();
     } catch (err: any) {
       console.log("Error Adding New Role ", err);
-      setError(err.message);
+      
     }
   };
 
